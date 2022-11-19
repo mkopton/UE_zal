@@ -9,6 +9,7 @@ from fastapi.responses import StreamingResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from PIL import Image, ImageOps
 from pydantic import BaseModel
+import uvicorn
 
 users_db = {
     "marcin": {
@@ -94,7 +95,7 @@ async def get_time(User = Depends(get_current_active_user)):
 @app.get("/")
 def welcome():
     """Function to print welcome message"""
-    return {'message': f"Projekt na zaliczenie Programowania Zaawansowanego"}
+    return {'message': f"Projekt na zaliczenie Programowania Zaawansowanego, sprawdź http://127.0.0.1:8000/docs aby dowiedzieć się więcej!"}
 
 @app.get("/prime/{number}")
 def is_prime(number):
@@ -118,3 +119,6 @@ def image_color_invert(img: UploadFile = File(...)):
     original_image.save(inverted_image, "JPEG")
     inverted_image.seek(0)
     return StreamingResponse(inverted_image, media_type="image/jpeg")
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", port=8000, log_level="info")
